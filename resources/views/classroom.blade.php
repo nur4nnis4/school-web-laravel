@@ -9,9 +9,7 @@
             <tr>
                 <th>No.</th>
                 <th>Name</th>
-                <th>Teacher</th>
-                <th>Total Students</th>
-                <th>Students</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -19,12 +17,10 @@
                 <tr>
                     <th>{{ $loop->iteration }}</th>
                     <td>{{ $class->name }}</td>
-                    <td>{{ $class->teacher->name }}</td>
-                    <td>{{ count($class->students) }}</td>
                     <td>
-                        @foreach ($class->students as $student)
-                            {{ $student['name'] }} <br>
-                        @endforeach
+                        <a href="/classes/{{ $class->id }}"><span class="bi bi-search"></span></a>
+                        <a href=""><span style="color:red" class="bi bi-trash"></span></a>
+                        <a href=""><span style="color:green" class="bi bi-pencil-square"></span></a>
                     </td>
                 </tr>
             @endforeach

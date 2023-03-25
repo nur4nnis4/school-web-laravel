@@ -17,6 +17,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::controller(StudentController::class)->group(function () {
+    Route::get('/students', 'index');
+    Route::get('/students/{id}', 'show');
+    Route::get('/student-create', 'create');
+    Route::post('/student-store', 'store');
+    Route::get('/student-edit/{id}', 'edit');
+    Route::put('/student-update/{id}', 'update');
+});
+
+
+Route::get('/classes', [ClassController::class, 'index']);
+Route::get('/classes/{id}', [ClassController::class, 'show']);
+
+Route::get('/extracurricular', [ExtracurricularController::class, 'index']);
+
+Route::get('/teachers', [TeacherController::class, 'index']);
+Route::get('/teachers/{id}', [TeacherController::class, 'show']);
+
 Route::get('/', function () {
     return view('home', [
         'name' => 'Nisa',
@@ -24,10 +43,6 @@ Route::get('/', function () {
         'fruit' => ['apple', 'grape', 'rambutan', 'durian', 'banana']
     ]);
 });
-Route::get('/students', [StudentController::class, 'index']);
-Route::get('/classes', [ClassController::class, 'index']);
-Route::get('/extracurricular', [ExtracurricularController::class, 'index']);
-Route::get('/teacher', [TeacherController::class, 'index']);
 
 // Route::get('/product', function () {
 //     return 'Product';

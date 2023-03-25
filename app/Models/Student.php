@@ -10,11 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Student extends Model
 {
     use HasFactory;
-    /**
-     * The extracurriculars that belong to the Student
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
+
+    protected $fillable = ['name', 'gender', 'nis', 'class_id'];
+
+
     public function extracurriculars(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -25,11 +24,6 @@ class Student extends Model
         );
     }
 
-    /**
-     * Get the ClassRoom that owns the Student
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function class(): BelongsTo
     {
         /**
