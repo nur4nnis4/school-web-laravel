@@ -28,7 +28,9 @@
             <tbody>
                 @foreach ($studentList as $student)
                     <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
+                        <th scope="row">
+                            {{ $studentList->firstItem() - 1 + $loop->iteration }}
+                        </th>
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->gender }}</td>
                         <td>{{ $student->nis }}</td>
@@ -43,6 +45,10 @@
                 @endforeach
             </tbody>
         </table>
+
+        <div class="my-5">
+            {{ $studentList->links() }}
+        </div>
     </div>
 
 @endsection
