@@ -1,19 +1,12 @@
 @extends('layouts.mainlayout')
 
-@section('title', 'Student')
+@section('title', 'Student Trash')
 
 @section('content')
-    <h1>Student Table </h1>
-    <div class="my-3 d-flex justify-content-end">
-        <div class="mx-1"><a class="btn btn-secondary" href="student-trash">Show Trash</a></div>
-        <div class="mx-1"><a class="btn btn-primary" href="student-create">Add Student</a></div>
-
+    <h1>Student Trash </h1>
+    <div class="my-3">
+        <a class="btn btn-secondary" href="/students">Back</a>
     </div>
-    @if (Session::has('status'))
-        <div class="alert alert-success" role="alert">
-            {{ Session::get('message') }}
-        </div>
-    @endif
     <div class="table-responsive">
         <table class="table table-striped">
             <thead class="thead-dark">
@@ -33,11 +26,7 @@
                         <td>{{ $student->gender }}</td>
                         <td>{{ $student->nis }}</td>
                         <td>
-                            <a href="/students/{{ $student->id }}"><span class="bi bi-search"></span></a>
-                            <a href="/student-edit/{{ $student->id }}"><span style="color:green"
-                                    class="bi bi-pencil-square"></span></a>
-                            <a href="/student-delete/{{ $student->id }}"><span style="color:red"
-                                    class="bi bi-trash"></span></a>
+                            <a class="btn btn-success btn-sm" href="student/{{ $student->id }}/restore">Restore</a>
                         </td>
                     </tr>
                 @endforeach

@@ -21,10 +21,18 @@ use Illuminate\Support\Facades\Route;
 Route::controller(StudentController::class)->group(function () {
     Route::get('/students', 'index');
     Route::get('/students/{id}', 'show');
+
     Route::get('/student-create', 'create');
     Route::post('/student-store', 'store');
+
     Route::get('/student-edit/{id}', 'edit');
     Route::put('/student-update/{id}', 'update');
+
+    Route::get('/student-delete/{id}', 'delete');
+    Route::delete('/student-destroy/{id}', 'destroy');
+
+    Route::get('/student-trash', 'showTrash');
+    Route::get('/student/{id}/restore', 'restoreTrash');
 });
 
 

@@ -57,11 +57,32 @@ class StudentController extends Controller
         return redirect('/students');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function delete(string $id)
+    {
+        $student = Student::findOrFail($id);
+        return view('student-delete', ['student' => $student]);
+    }
+
     public function destroy(string $id)
     {
-        //
+        $deletedStudent = Student::findOrFail($id);
+        $deletedStudent->delete();
+        if ($deletedStudent) {
+            Session::flash('status', 'success');
+            Session::flash('message', 'Delete student success !');
+        }
+        return redirect('/students');
+    }
+
+    public function showTrash()
+    {
+        $studentTrash = Student::onlyTrashed()->get();
+        return view('student-trash', ['studentList' => $studentTrash]);
+    }
+
+    public function restoreTrash(String $id)
+    {
+        $studentTrash = Student::withTrashed()->where('id', $id)->restore();
+        return redirect('student-trash');
     }
 }
