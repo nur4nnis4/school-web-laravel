@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\ExtracurricularController;
 use App\Http\Controllers\StudentController;
@@ -17,40 +18,52 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login', [AuthController::class, 'authenticate']);
+});
 
-Route::controller(StudentController::class)->group(function () {
-    Route::get('/students', 'index');
-    Route::get('/students/{id}', 'show');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/student-create', 'create');
-    Route::post('/student-store', 'store');
+    Route::get('/', function () {
+        return view('home');
+    });
 
-    Route::get('/student-edit/{id}', 'edit');
-    Route::put('/student-update/{id}', 'update');
+    Route::get('/classes', [ClassController::class, 'index']);
+    Route::get('/classes/{id}', [ClassController::class, 'show']);
 
-    Route::get('/student-delete/{id}', 'delete');
-    Route::delete('/student-destroy/{id}', 'destroy');
 
-    Route::get('/student-trash', 'showTrash');
-    Route::get('/student/{id}/restore', 'restoreTrash');
+    Route::controller(StudentController::class)->group(function () {
+
+        Route::get('/students', 'index');
+        Route::get('/students/{id}', 'show');
+
+        Route::get('/student-create', 'create');
+        Route::post('/student-store', 'store');
+
+        Route::get('/student-edit/{id}', 'edit');
+        Route::put('/student-update/{id}', 'update');
+
+        Route::get('/student-delete/{id}', 'delete');
+        Route::delete('/student-destroy/{id}', 'destroy');
+
+        Route::get('/student-trash', 'showTrash');
+        Route::get('/student/{id}/restore', 'restoreTrash');
+    });
+
+    Route::get('/extracurricular', [ExtracurricularController::class, 'index']);
+
+    Route::get('/teachers', [TeacherController::class, 'index']);
+    Route::get('/teachers/{id}', [TeacherController::class, 'show']);
 });
 
 
-Route::get('/classes', [ClassController::class, 'index']);
-Route::get('/classes/{id}', [ClassController::class, 'show']);
 
-Route::get('/extracurricular', [ExtracurricularController::class, 'index']);
 
-Route::get('/teachers', [TeacherController::class, 'index']);
-Route::get('/teachers/{id}', [TeacherController::class, 'show']);
 
-Route::get('/', function () {
-    return view('home', [
-        'name' => 'Nisa',
-        'role' => 'admin',
-        'fruit' => ['apple', 'grape', 'rambutan', 'durian', 'banana']
-    ]);
-});
+
+
 
 // Route::get('/product', function () {
 //     return 'Product';
