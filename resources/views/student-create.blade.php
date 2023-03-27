@@ -12,7 +12,8 @@
             </div>
         @endif
         <h1>Add Student</h1>
-        <form action="/student-store" method="POST">
+
+        <form action="/student-store" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
@@ -60,6 +61,11 @@
                 </select>
                 <label for="class">Class</label>
             </div>
+
+            <div class="mb-3">
+                <input type="file" name="avatar" class="form-control" id="avatar" accept="image/*">
+            </div>
+
 
             <div class="d-flex flex-row-reverse">
                 <button type="submit" class="btn btn-primary">Save</button>

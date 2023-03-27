@@ -37,10 +37,12 @@ class StudentController extends Controller
 
     public function store(StoreStudentRequest $request)
     {
-        // $validated = $request->validate([
-        //     'nis' => 'unique:students|size:10|numeric',
-        //     'name' => 'max:50',
-        // ]);
+        if ($request->file('avatar')) {
+            $extension = $request->file('avatar')->getClientOriginalExtension();
+            $fileName  = $request->name . '-' . now()->timestamp . '.' . $extension;
+            $request->file('avatar')->storeAs('students/avatar', $fileName);
+            $request['image'] = $fileName;
+        }
         $student = Student::create($request->all());
         if ($student) {
             Session::flash('status', 'success');
@@ -58,6 +60,13 @@ class StudentController extends Controller
 
     public function update(Request $request, String $id)
     {
+        $fileName = '';
+        if ($request->file('avatar')) {
+            $extension = $request->file('avatar')->getClientOriginalExtension();
+            $fileName  = $request->name . '-' . now()->timestamp . '.' . $extension;
+            $request->file('avatar')->storeAs('students/avatar', $fileName);
+            $request['image'] = $fileName;
+        }
         $student = Student::findOrFail($id);
         $student->update($request->all());
         return redirect('/students');

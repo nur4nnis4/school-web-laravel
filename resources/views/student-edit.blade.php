@@ -3,7 +3,7 @@
 @section('content')
     <div class="mx-auto" style="width: 50%">
         <h1>Edit Student</h1>
-        <form action="/student-update/{{ $student->id }}" method="POST">
+        <form action="/student-update/{{ $student->id }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="form-floating mb-3">
@@ -34,6 +34,11 @@
                 </select>
                 <label for="class">Class</label>
             </div>
+
+            <div class="mb-3">
+                <input type="file" name="avatar" class="form-control" id="avatar" accept="image/*">
+            </div>
+
             <div class="d-flex flex-row-reverse">
                 <button type="submit" class="btn btn-primary">Update</button>
             </div>
