@@ -5,8 +5,14 @@
 @section('content')
     <h1>Student Table </h1>
     <div class="my-3 d-flex justify-content-end">
-        <div class="mx-1"><a class="btn btn-secondary" href="student-trash">Show Trash</a></div>
-        <div class="mx-1"><a class="btn btn-primary" href="student-create">Add Student</a></div>
+        @if (Auth::user()->role_id == 1)
+            <div class="mx-1"><a class="btn btn-secondary" href="student-trash">Show Trash</a></div>
+        @endif
+
+        @if (Auth::user()->role_id == 2)
+        @else
+            <div class="mx-1"><a class="btn btn-primary" href="student-create">Add Student</a></div>
+        @endif
     </div>
 
     @if (Session::has('status'))
@@ -36,7 +42,10 @@
                     <th>Gender</th>
                     <th>NIS</th>
                     <th>Class</th>
-                    <th>Action</th>
+                    @if (Auth::user()->role_id == 2)
+                    @else
+                        <th>Action</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -49,13 +58,21 @@
                         <td>{{ $student->gender }}</td>
                         <td>{{ $student->nis }}</td>
                         <td>{{ $student->class->name }}</td>
-                        <td>
-                            <a href="/students/{{ $student->id }}"><span class="bi bi-search"></span></a>
-                            <a href="/student-edit/{{ $student->id }}"><span style="color:green"
-                                    class="bi bi-pencil-square"></span></a>
-                            <a href="/student-delete/{{ $student->id }}"><span style="color:red"
-                                    class="bi bi-trash"></span></a>
-                        </td>
+                        @if (Auth::user()->role_id == 2)
+                        @else
+                            <td>
+                                <a href="/students/{{ $student->id }}"><span class="bi bi-search"></span></a>
+                                <a href="/student-edit/{{ $student->id }}"><span style="color:green"
+                                        class="bi bi-pencil-square"></span></a>
+
+                                @if (Auth::user()->role_id == 1)
+                                    <a href="/student-delete/{{ $student->id }}"><span style="color:red"
+                                            class="bi bi-trash"></span></a>
+                                @endif
+
+                            </td>
+                        @endif
+
                     </tr>
                 @endforeach
             </tbody>
