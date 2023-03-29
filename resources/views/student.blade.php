@@ -25,8 +25,8 @@
     <div class="col-12 col-sm-8 col-md-6 ">
         <form method="GET">
             <div class="input-group mb-3">
-                <input type="text" name="keyword" value="{{ old('keyword') }}" id="name" class="form-control"
-                    placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
+                <input type="text" name="keyword" id="name" class="form-control" placeholder="Search"
+                    aria-label="Username" aria-describedby="basic-addon1">
                 <button class="input-group-text btn btn-primary">
                     <span class="bi bi-search mx-2">
                 </button>
