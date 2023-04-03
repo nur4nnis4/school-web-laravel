@@ -41,8 +41,10 @@ class StoreStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nis' => 'unique:students|numeric',
-            'name' => 'max:50',
+            'name' => 'required|max:50',
+            'gender' => 'required',
+            'class_id' => 'required',
+            'nis' => 'required|unique:students|numeric',
         ];
     }
 }

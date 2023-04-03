@@ -8,31 +8,51 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
+
 class StudentController extends Controller
 {
 
     public function index(Request $request)
     {
-        $keyword = $request->keyword;
-        $students = Student::with('class')
-            ->where('name', 'LIKE', '%' . $keyword . '%')
-            ->orWhere('nis', 'LIKE', $keyword . '%')
-            ->orWhereHas('class', function ($query) use ($keyword) {
-                $query->where('name', 'LIKE', '%' . $keyword . '%');
-            })->paginate(10);
-        return view('student', ['studentList' => $students]);
+
+        return view('student.student');
+    }
+
+    public function read(Request $request)
+    {
+        /**
+         * 1. Select('students.*') prevents same column name
+         * (student:name & class:name) confusion
+         * when ordering table based on class name
+
+         * 2. Should not order table on eloquent (ex:orderBy('id', 'desc')) if
+         * datatables frontend ordering is activated(ordering:true)
+         */
+
+        $students = Student::with('class:id,name')->select('students.*');
+        return datatables()::of($students)
+            ->addIndexColumn()
+            ->editColumn('class.name', function ($data) {
+                return $data->class->name;
+            })
+            ->addColumn('actions', function ($data) {
+                return view('student.action-buttons', ['student' => $data]);
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
     }
 
     public function show(string $id)
     {
+
         $student = Student::with(['class.teacher', 'extracurriculars'])->findOrFail($id);
-        return view('student-detail', ['student' => $student]);
+        return view('student.student-detail', ['student' => $student]);
     }
 
     public function create()
     {
         $classes = ClassRoom::select('id', 'name')->get();
-        return view('student-create', ['classes' => $classes]);
+        return view('student.student-create', ['classes' => $classes]);
     }
 
     public function store(StoreStudentRequest $request)
@@ -44,23 +64,19 @@ class StudentController extends Controller
             $request['image'] = $fileName;
         }
         $student = Student::create($request->all());
-        if ($student) {
-            Session::flash('status', 'success');
-            Session::flash('message', 'Successfully added data to database');
-        }
-        return redirect('/students');
+
+        return response()->json(['status' => 200]);
     }
 
     public function edit(string $id)
     {
         $student = Student::with(['class', 'extracurriculars'])->findOrFail($id);
         $classes = ClassRoom::where('id', '!=', $student->class_id)->get(['id', 'name']);
-        return view('student-edit', ['student' => $student, 'classes' => $classes]);
+        return view('student.student-edit', ['student' => $student, 'classes' => $classes]);
     }
 
     public function update(Request $request, String $id)
     {
-        $fileName = '';
         if ($request->file('avatar')) {
             $extension = $request->file('avatar')->getClientOriginalExtension();
             $fileName  = $request->name . '-' . now()->timestamp . '.' . $extension;
@@ -69,30 +85,26 @@ class StudentController extends Controller
         }
         $student = Student::findOrFail($id);
         $student->update($request->all());
-        return redirect('/students');
+        return response()->json(['status' => 200]);
     }
 
     public function delete(string $id)
     {
         $student = Student::findOrFail($id);
-        return view('student-delete', ['student' => $student]);
+        return view('student.student-delete', ['student' => $student]);
     }
 
     public function destroy(string $id)
     {
         $deletedStudent = Student::findOrFail($id);
         $deletedStudent->delete();
-        if ($deletedStudent) {
-            Session::flash('status', 'success');
-            Session::flash('message', 'Delete student success !');
-        }
-        return redirect('/students');
+        return response()->json(['status' => 200]);
     }
 
     public function showTrash()
     {
         $studentTrash = Student::onlyTrashed()->get();
-        return view('student-trash', ['studentList' => $studentTrash]);
+        return view('student.student-trash', ['studentList' => $studentTrash]);
     }
 
     public function restoreTrash(String $id)

@@ -37,13 +37,14 @@ Route::middleware(['auth'])->group(function () {
     Route::controller(StudentController::class)->group(function () {
 
         Route::get('/students', 'index');
+        Route::get('students-read', 'read')->name('student.read');
 
         // Only admin and teacher can access routes below
         Route::middleware(['must-admin-or-teacher'])->group(function () {
             Route::get('/students/{id}', 'show');
 
             Route::get('/student-create', 'create');
-            Route::post('/student-store', 'store');
+            Route::post('/students', 'store')->name('student.store');
 
             Route::get('/student-edit/{id}', 'edit');
             Route::put('/student-update/{id}', 'update');

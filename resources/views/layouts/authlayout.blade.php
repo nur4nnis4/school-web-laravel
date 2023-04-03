@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div class="vh-100 d-flex align-items-center justify-content-center mt-5">@yield('content')</div>
+    <div class="container col-xl-10 col-xxl-8 px-5 py-5">@yield('content')</div>
 
     {{-- BOOTSTRAP --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
