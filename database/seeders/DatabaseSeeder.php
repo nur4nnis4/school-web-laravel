@@ -16,8 +16,13 @@ class DatabaseSeeder extends Seeder
             /** The order should be based on independent
              *  class to dependent class based on foreign key
              */
+            TeacherSeeder::class,
             ClassRoomSeeder::class,
             StudentSeeder::class,
+            ExtracurricularSeeder::class,
+            RoleSeeder::class,
+            StudentExtracurricularSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }
